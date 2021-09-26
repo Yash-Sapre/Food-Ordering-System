@@ -57,7 +57,7 @@ def register_page():
         db.commit()
         print('c')
         return redirect(url_for('login_page'))
-    return render_template('register.html',title="Register Page",form=form)
+    return render_template('register.html',title="Register Page", form=form)
 
 
 @app.route("/logout")

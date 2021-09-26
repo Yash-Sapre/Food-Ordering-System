@@ -12,7 +12,7 @@ def init_db():
                      'username VARCHAR(100),password VARCHAR(100),email VARCHAR(100))')
     dbCursor.execute('CREATE TABLE FOOD (food_id INT AUTO_INCREMENT PRIMARY KEY,food_name VARCHAR(100))')
     dbCursor.execute('CREATE TABLE CUSTOMER (customer_id INT AUTO_INCREMENT PRIMARY KEY ,customer_name VARCHAR(100))')
-    dbCursor.execute('CREATE TABLE CUSTOMER_ORDER (order_id INT PRIMARY KEY, food_id INT,customer_id INT,count INT,status BOOLEAN)')
+    dbCursor.execute('CREATE TABLE CUSTOMER_ORDER (order_id INT, food_id INT,customer_id INT,count INT,status BOOLEAN)')
 
 
 '''
