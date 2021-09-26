@@ -1,0 +1,7 @@
+
+{% if g.user %}
+You have logged in as {{ g.user.1 }}
+To logout click <a href="{{  url_for('logout_page') }}">here</a>
+{% endif %}
+<h1>home page</h1>
+<a href="{{ url_for('register_page')}}">Register</a>
