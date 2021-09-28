@@ -1,6 +1,6 @@
 import mysql.connector
 
-db = mysql.connector.connect(host="localhost",user="root",password="Amoeba!23")
+db = mysql.connector.connect(host="localhost",user="root",password="root123")
 dbCursor = db.cursor()
 
 
@@ -33,6 +33,7 @@ else:
     print('CREATING DATABASE COUNTER')
     init_db()
     dbCursor.execute('USE COUNTER')
+
 
 
 

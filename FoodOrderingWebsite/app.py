@@ -25,9 +25,9 @@ def before_request():
             session.pop('user_id')
 
 
-@app.route("/home")
+@app.route("/",methods=['POST','GET'])
 def home_page():
-    return render_template('home.html')
+    return render_template('home.html', status=False)
 
 
 @app.route("/login",methods=['GET', 'POST'])
@@ -66,4 +66,5 @@ def logout_page():
     g.pop('user')
     return redirect('/home')
 
-
+if __name__ == "__main__":
+    app.run(debug=True) 
