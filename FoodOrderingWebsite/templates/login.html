@@ -1,18 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    You can login here!
-    <form method="post">
-        {{ form.hidden_tag() }}
-        {{ form.Username.label }}
-        {{ form.Username }}<br>
-        {{ form.Password.label}}
-        {{ form.Password }}<br>
-        {{ form.Submit }}
-    </form>
-</body>
-</html>
+{% extends 'layout.html' %}
+{% block body %}
+    <section class="container-fluid">
+        <section class="row justify-content-center">
+            <section class="col-12 col-sm-6 col-md-3">
+                <form method="post" class="form-container">
+                    {{ form.csrf_token }}
+                    <div class="form-group">
+                        {{ form.Username.label }}
+                        {{ form.Username(class = "form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.Password.label }}
+                        {{ form.Password(class = "form-control") }}
+                    </div>
+                    <br>
+                    {{ form.Submit(class="btn btn-primary btn-block" ) }}
+                </form>
+            </section>
+        </section>
+    </section>
+{% endblock %}
