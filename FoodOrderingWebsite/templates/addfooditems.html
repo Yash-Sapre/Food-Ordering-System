@@ -1,0 +1,103 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col md-12">
+ 
+            <div class="jumbotron p-3">
+ 
+                <h2>Add <b> Food Items </b></h2>  <button type="button"  class="btn btn-success float-right"
+                data-toggle="modal" data-target="#mymodal">Add</button> 
+ 
+ 
+                
+ 
+                  
+ 
+ 
+               
+ 
+ 
+                
+ 
+ 
+            </div>
+ 
+ 
+ 
+                  
+ 
+ 
+<div id="mymodal" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+ 
+            <h4 class="modal-title">Add Food Items</h4>
+         </div>
+         <div class="modal-body">
+ 
+            <form action="{{url_for('add_food')}}" method="POST">
+ 
+ 
+               <div class="form-group">
+ 
+                  <label>Food Id:</label>
+                  <input type="text" class="form-control" name="food_id" required="1">
+ 
+ 
+               </div>
+               <div class="form-group">
+ 
+                  <label>Name of Food:</label>
+                  <input type="text" class="form-control" name="name" required="1">
+ 
+ 
+               </div>
+ 
+ 
+ 
+               <div class="form-group">
+ 
+ 
+                  <button class="btn btn-primary" type="submit">Add here</button>
+ 
+ 
+               </div>
+ 
+ 
+            </form>
+ 
+ 
+         </div>
+ 
+ 
+         <div class="modal-footer">
+ 
+ 
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+ 
+ 
+         </div>
+ 
+ 
+      </div>
+ 
+ 
+   </div>
+ 
+ 
+</div>
+ 
+ 
+ 
+ 
+ 
+        </div>
+ 
+    </div>
+ 
+ 
+</div>
+ 
+{% endblock%}

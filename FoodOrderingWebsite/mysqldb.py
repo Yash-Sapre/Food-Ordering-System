@@ -1,6 +1,6 @@
 import mysql.connector
 
-db = mysql.connector.connect(host="localhost",user="root",password="Amoeba!23")
+db = mysql.connector.connect(host="localhost",user="root",password="root123")
 dbCursor = db.cursor()
 
 
@@ -13,7 +13,7 @@ def init_db():
     dbCursor.execute('CREATE TABLE FOOD (food_id INT AUTO_INCREMENT PRIMARY KEY,food_name VARCHAR(100))')
     dbCursor.execute('CREATE TABLE CUSTOMER (customer_id INT AUTO_INCREMENT PRIMARY KEY ,customer_name VARCHAR(100))')
     dbCursor.execute('CREATE TABLE CUSTOMER_ORDER (order_id INT, food_id INT,customer_id INT,count INT,status BOOLEAN)')
-
+    dbCursor.execute('CREATE TABLE ADMIN(username varchar(20),password varchar(100))')
 
 '''
 Executing show databases 

@@ -1,8 +1,11 @@
+
+from logging import disable
 import flask_bcrypt
 from flask import Flask,render_template,request,session,redirect,g,url_for
-from forms import LoginForm,RegistrationForm
+from forms import LoginForm,RegistrationForm,Adminloginform
 from mysqldb import dbCursor,db
 from flask_bcrypt import Bcrypt
+
 
 
 bcrypt = Bcrypt()
@@ -25,7 +28,7 @@ def before_request():
             session.pop('user_id')
 
 
-@app.route("/home")
+@app.route("/")
 def home_page():
     return render_template('home.html')
 
@@ -41,7 +44,7 @@ def login_page():
         if record is not None:
             if bcrypt.check_password_hash(record[2],form.Password.data):
                 session['user_id'] = record[0]
-
+        
     return render_template('login.html',title="Login Page",form=form)
 
 
@@ -55,9 +58,50 @@ def register_page():
         print(f"INSERT INTO USER (username,password,email) VALUES ('{form.Username.data}','{hashed_password}','{form.Email.data}')")
         dbCursor.execute(f"INSERT INTO USER (username,password,email) VALUES ('{form.Username.data}','{hashed_password}','{form.Email.data}')")
         db.commit()
-        print('c')
+       
         return redirect(url_for('login_page'))
     return render_template('register.html',title="Register Page", form=form)
+
+
+@app.route("/admin",methods=['GET', 'POST'])
+def log_admin():
+    form=Adminloginform()
+    if form.validate_on_submit:
+        
+        session.pop('user_id',None)
+        print(f'SELECT * FROM ADMIN where username = "{form.username.data}"')
+        dbCursor.execute(f'SELECT * FROM ADMIN where username = "{form.username.data}"')
+        # record = dbCursor.fetchall()[0]
+        
+        return redirect('/userdb')
+    return render_template('admin.html',title="Admin login Page",form=form)
+        
+# @app.route("/admin_see",methods=['GET','POST'])
+# def admin_pg():
+#     details=dbCursor.fetchall()[0]
+
+@app.route("/userdb",methods=['GET', 'POST'])
+def showdb():
+    
+    dbCursor.execute("select user_id,username,email from USER")
+    details=dbCursor.fetchall()
+    
+    return render_template('admin_see.html',title="User Database",details=details)
+
+@app.route("/addfooditems",methods=['GET','POST'])
+def add_food():
+    if request.method=='POST':
+        food_id=request.form['food_id']
+        name=request.form['name']
+        sql=("INSERT INTO FOOD (food_id,food_name) values(%s,%s) ")
+        val=(food_id,name)
+        dbCursor.execute(sql,val)
+        db.commit()
+        
+        print(dbCursor.rowcount, "record inserted.")
+    return render_template('addfooditems.html',title="Add Food items")
+
+
 
 
 @app.route("/logout")

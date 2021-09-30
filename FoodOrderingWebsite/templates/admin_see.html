@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{%block body%}
+<div style="color:blue;text-align:center">
+<h1 >Customer DataBase</h1>
+</div>
+<hr>
+<table class="table">
+  <thead>
+    <tr>
+    
+      <th scope="col">User_id</th>
+      <th scope="col">Username</th>
+      <th scope="col">Email</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in details %}
+    <tr>
+      <td>{{item.0}}</td>
+      <td>{{item.1}}</td>
+      <td>{{item.2}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{%endblock%}
