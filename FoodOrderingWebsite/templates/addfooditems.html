@@ -10,17 +10,6 @@
                 data-toggle="modal" data-target="#mymodal">Add</button> 
  
  
-                
- 
-                  
- 
- 
-               
- 
- 
-                
- 
- 
             </div>
  
  
@@ -37,7 +26,7 @@
          </div>
          <div class="modal-body">
  
-            <form action="{{url_for('add_food')}}" method="POST">
+            <form enctype="multipart/form-data" method="POST">
  
  
                <div class="form-group">
@@ -54,6 +43,23 @@
  
  
                </div>
+               <div class="form-group">
+ 
+                  <label>Image:</label>
+                  <input type="file" class="form-control" name="food_image" required="1">
+ 
+ 
+               </div>
+ 
+               <div class="form-group">
+ 
+                  <label>Price:</label>
+                  <input type="number" class="form-control" name="price" required="1">
+ 
+ 
+               </div>
+               
+
  
  
  
@@ -67,6 +73,8 @@
  
  
             </form>
+           
+
  
  
          </div>
@@ -98,6 +106,27 @@
     </div>
  
  
+</div>
+<div>
+ <table class="table">
+  <thead>
+    <tr>
+    
+      <th scope="col">Food_id</th>
+      <th scope="col">Name of Food </th>
+      <th scope="col">Price(.Rs)</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in Food_details %}
+    <tr>
+      <td>{{item.0}}</td>
+      <td>{{item.1}}</td>
+      <td>{{item.2}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 </div>
  
 {% endblock%}

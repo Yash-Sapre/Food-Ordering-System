@@ -1,11 +1,13 @@
 
 from logging import disable
+import os
 import flask_bcrypt
 from flask import Flask,render_template,request,session,redirect,g,url_for
+from werkzeug.utils import secure_filename
 from forms import LoginForm,RegistrationForm,Adminloginform
 from mysqldb import dbCursor,db
 from flask_bcrypt import Bcrypt
-
+from io import BytesIO
 
 
 bcrypt = Bcrypt()
@@ -90,16 +92,23 @@ def showdb():
 
 @app.route("/addfooditems",methods=['GET','POST'])
 def add_food():
+    dbCursor.execute("select food_id,food_name,price from FOOD")
+    Food_details=dbCursor.fetchall()
+    location="C:\\Users\\GAJENDRA\\Desktop\\Food-Ordering-System\\FoodOrderingWebsite\\static"
     if request.method=='POST':
         food_id=request.form['food_id']
         name=request.form['name']
-        sql=("INSERT INTO FOOD (food_id,food_name) values(%s,%s) ")
-        val=(food_id,name)
+        price=request.form['price']
+        food_image=request.files['food_image']
+        food_image.save(os.path.join(location,secure_filename(food_image.filename)))
+        sql=("INSERT INTO FOOD (food_id,food_name,price) values(%s,%s,%s) ")
+        val=(food_id,name,price)
         dbCursor.execute(sql,val)
+       
         db.commit()
-        
         print(dbCursor.rowcount, "record inserted.")
-    return render_template('addfooditems.html',title="Add Food items")
+        return redirect('/addfooditems')
+    return render_template('addfooditems.html',title="Add Food items",Food_details=Food_details)
 
 
 
