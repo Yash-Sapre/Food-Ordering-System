@@ -94,13 +94,12 @@ def showdb():
 def add_food():
     dbCursor.execute("select food_id,food_name,price from FOOD")
     Food_details=dbCursor.fetchall()
-    location="C:\\Users\\GAJENDRA\\Desktop\\Food-Ordering-System\\FoodOrderingWebsite\\static"
     if request.method=='POST':
         food_id=request.form['food_id']
         name=request.form['name']
         price=request.form['price']
         food_image=request.files['food_image']
-        food_image.save(os.path.join(location,secure_filename(food_image.filename)))
+        food_image.save(os.path.join(os.getcwd()+'\static',secure_filename(food_id+'.jpg')))
         sql=("INSERT INTO FOOD (food_id,food_name,price) values(%s,%s,%s) ")
         val=(food_id,name,price)
         dbCursor.execute(sql,val)
