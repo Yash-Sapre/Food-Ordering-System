@@ -1,0 +1,106 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <div class="container" >
+        <div class="row">
+        <div style="width :75% ;float: left;display: flex;flex-wrap: wrap" >
+            {% for item in food_list %}
+
+                <div class="card text-white bg-success col-3" style="margin: 1em ;height:10em">
+                    {#                        <img class="card-img-top" src="" alt="Card image cap">#}
+                    <div class="card-body">
+                        <h5 class="card-title" id={{ item.0 }}>{{ item.1 }}</h5>
+                        <div class="card-text" id="price_{{ item.0 }}">{{ item.2 }}</div>
+                        <input type="button" value="Add to Cart" onclick="add_food({{ item.0 }})">
+                    </div>
+                </div>
+
+            {% endfor %}
+        </div>
+    <div style="width: 25% ;float:left">
+            <form method="POST"  id="values" onsubmit="final_evaluate()">
+
+                <div class="card">
+                    <label>Customer Name:</label>
+                    <input type="text" name="customer">
+                </div>
+
+                <div class="form-group" id="food_cart" style="overflow-y:auto ; height: 15rem ">
+
+                </div>
+
+                    Total Price :<span id ="total_price"></span><br>
+                    <input type ="submit" value="Confirm Order" >
+
+
+            </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let item_list = [];
+        let item_id_list=[];
+        let items_count = 0;
+
+        function add_food(food_id) {
+            if (item_list.includes(document.getElementById(food_id).innerText)) {
+                console.log("Value already present");
+            } else {
+                item_list.push(document.getElementById(food_id).innerText);
+                item_id_list.push(food_id);
+                items_count++;
+                let element_id = "item_" + food_id;
+                let price_id = "price_" + food_id;
+
+                console.log(price_id);
+                let food_cart = document.getElementById('food_cart');
+                console.log(document.getElementById(food_id));
+                food_cart.innerHTML = food_cart.innerHTML
+                    + "<div class='card'><div class='card-body'><h5 class ='card-title'>"
+                    + document.getElementById(food_id).innerText
+                    + "</h5><input type='button' value='-' onclick=add_subtract_count('" + element_id + "','-')><span> <span id ='" + element_id + "'> 1 </span> </span><input type='button' value='+' onclick=add_subtract_count('" + element_id + "','+')><span>Price :"
+                    + document.getElementById(price_id).innerText
+                    + "</span></div></div>";
+
+            }
+            price_evaluate();
+        }
+
+        function add_subtract_count(element_id, operation) {
+            let textfield = document.getElementById(element_id);
+            let count = Number(textfield.innerText);
+            if (operation === "+") {
+                count = count + 1;
+            } else {
+                count = count - 1;
+            }
+            textfield.innerText = count.toString();
+            price_evaluate();
+        }
+        function price_evaluate(){
+            console.log("Something changed!");
+            console.log(item_id_list);
+            let total_price = 0;
+            let price = 0;
+            for(let id_iterator of item_id_list) {
+                console.log(id_iterator);
+                price = Number(document.getElementById('item_' + id_iterator).innerText) * Number(document.getElementById('price_' + id_iterator).innerText);
+                total_price = total_price + price;
+            }
+            document.getElementById('total_price').innerText = total_price.toString();
+        };
+        function final_evaluate(){
+            let count = 0;
+            let card_id =0;
+            let final_value = '';
+            let submit_form = document.getElementById('values');
+            for(let id_iterator of item_id_list) {
+                console.log(id_iterator);
+                count = Number(document.getElementById('item_' + id_iterator).innerText);
+                card_id = 'card_'+id_iterator;
+                final_value = card_id +'-'+count.toString();
+                submit_form.innerHTML = submit_form.innerHTML+"<input type ='hidden' name='card' value = "+final_value+">";
+            }
+        }
+    </script>
+{% endblock %}
