@@ -1,45 +1,41 @@
 {% extends 'layout.html' %}
 {% block body %}
-    <div class="container" >
+    <div class="container">
         <div class="row">
-        <div style="width :75% ;float: left;display: flex;flex-wrap: wrap" >
-            {% for item in food_list %}
+            <div style="width :75% ;float: left;display: flex;flex-wrap: wrap">
+                {% for item in food_list %}
 
-                <div class="card text-white bg-success col-3" style="margin: 1em ;height:10em">
-                    {#                        <img class="card-img-top" src="" alt="Card image cap">#}
-                    <div class="card-body">
-                        <h5 class="card-title" id={{ item.0 }}>{{ item.1 }}</h5>
-                        <div class="card-text" id="price_{{ item.0 }}">{{ item.2 }}</div>
-                        <input type="button" value="Add to Cart" onclick="add_food({{ item.0 }})">
+                    <div class="card text-white bg-success col-3" style="margin: 1em ;height:10em">
+                        {#                        <img class="card-img-top" src="" alt="Card image cap">#}
+                        <div class="card-body">
+                            <h5 class="card-title" id={{ item.0 }}>{{ item.1 }}</h5>
+                            <div class="card-text" id="price_{{ item.0 }}">{{ item.2 }}</div>
+                            <input type="button" value="Add to Cart" onclick="add_food({{ item.0 }})">
+                        </div>
                     </div>
-                </div>
 
-            {% endfor %}
-        </div>
-    <div style="width: 25% ;float:left">
-            <form method="POST"  id="values" onsubmit="final_evaluate()">
+                {% endfor %}
+            </div>
+            <div style="width: 25% ;float:left">
+                <form method="POST" id="values" onsubmit="final_evaluate()" >
 
-                <div class="card">
-                    <label>Customer Name:</label>
-                    <input type="text" name="customer">
-                </div>
+                    <div class="card">
+                        Customer Name:
+                        <input type="text" name = "customer_name" id="customer_name" >
 
-                <div class="form-group" id="food_cart" style="overflow-y:auto ; height: 15rem ">
-
-                </div>
-
-                    Total Price :<span id ="total_price"></span><br>
-                    <input type ="submit" value="Confirm Order" >
-
-
-            </form>
+                    </div>
+                    <div class="form-group" id="food_cart" style="overflow-y:auto ; height: 15rem ">
+                    </div>
+                    Total Price :<span id="total_price"></span><br>
+                    <input type="submit" value="Confirm Order">
+                </form>
             </div>
         </div>
     </div>
 
     <script>
         let item_list = [];
-        let item_id_list=[];
+        let item_id_list = [];
         let items_count = 0;
 
         function add_food(food_id) {
@@ -77,29 +73,31 @@
             textfield.innerText = count.toString();
             price_evaluate();
         }
-        function price_evaluate(){
+
+        function price_evaluate() {
             console.log("Something changed!");
             console.log(item_id_list);
             let total_price = 0;
             let price = 0;
-            for(let id_iterator of item_id_list) {
+            for (let id_iterator of item_id_list) {
                 console.log(id_iterator);
                 price = Number(document.getElementById('item_' + id_iterator).innerText) * Number(document.getElementById('price_' + id_iterator).innerText);
                 total_price = total_price + price;
             }
             document.getElementById('total_price').innerText = total_price.toString();
-        };
-        function final_evaluate(){
+        }
+        function final_evaluate() {
             let count = 0;
-            let card_id =0;
+            let card_id = 0;
             let final_value = '';
             let submit_form = document.getElementById('values');
-            for(let id_iterator of item_id_list) {
+
+            for (let id_iterator of item_id_list) {
                 console.log(id_iterator);
                 count = Number(document.getElementById('item_' + id_iterator).innerText);
-                card_id = 'card_'+id_iterator;
-                final_value = card_id +'-'+count.toString();
-                submit_form.innerHTML = submit_form.innerHTML+"<input type ='hidden' name='card' value = "+final_value+">";
+                card_id = 'card_' + id_iterator;
+                final_value = card_id + '-' + count.toString();
+                submit_form.innerHTML = submit_form.innerHTML + "<input type ='hidden' name='card' value = " + final_value + ">";
             }
         }
     </script>

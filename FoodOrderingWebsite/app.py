@@ -110,32 +110,38 @@ def logout_page():
     return redirect('/home')
 
 
-@app.route("/add_order",methods=['GET','POST'])
+@app.route("/add_order",methods=['GET', 'POST'])
 def add_order():
     dbCursor.execute("SELECT * FROM FOOD")
     food_list = dbCursor.fetchall()
-    print(food_list)
+
     if request.method == "POST":
 
         # Retrieving food id and their counts from the cart
-        food_count_dict ={}
+        food_count_dict = {}
+        print(request.form)
         for item in request.form.getlist('card'):
             food_count_dict[int(item.split('-')[0].replace('card_',''))]=int(item.split('-')[1])
 
         # Retrieving customer id
-        customer_name = request.form.get('customer')
+        print('-----------------------------------------------------')
+        customer_name = request.form.getlist('customer_name')[0]
         dbCursor.execute(f"select * from customer where customer_name = '{customer_name}'")
         if len(dbCursor.fetchall()) == 0:
-            dbCursor.execute(f"insert into customer(customer_name) values({customer_name})")
+            dbCursor.execute(f"insert into customer (customer_name) values ('{customer_name}')")
         dbCursor.execute(f"select * from customer where customer_name = '{customer_name}'")
         customer_id = dbCursor.fetchall()[0][1]
 
         # Retrieving biggest order_id
-        dbCursor.execute(f"select max(order_id) from customer_order")
-        order_id = dbCursor.fetchall()[0][0]
+        try:
+            dbCursor.execute(f"select max(order_id) from customer_order")
+            order_id = dbCursor.fetchall()[0][0] + 1
+        except:
+            order_id = 1
 
         # Inserting order in table
         for food_id,count in food_count_dict.items():
+            # print(f"insert into customer_order values ({order_id},{customer_id},{food_id},{count},false)")
             dbCursor.execute(f"insert into customer_order values ({order_id},{customer_id},{food_id},{count},false)")
         return redirect('/')
     return render_template("add_order.html",food_list=food_list)
