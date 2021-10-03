@@ -22,7 +22,6 @@
                     <div class="card">
                         Customer Name:
                         <input type="text" name = "customer_name" id="customer_name" >
-
                     </div>
                     <div class="form-group" id="food_cart" style="overflow-y:auto ; height: 15rem ">
                     </div>
@@ -91,7 +90,9 @@
             let card_id = 0;
             let final_value = '';
             let submit_form = document.getElementById('values');
-
+            let customer_name = document.getElementById('customer_name').value;
+            window.alert(customer_name);
+            console.log(customer_name);
             for (let id_iterator of item_id_list) {
                 console.log(id_iterator);
                 count = Number(document.getElementById('item_' + id_iterator).innerText);
@@ -99,6 +100,7 @@
                 final_value = card_id + '-' + count.toString();
                 submit_form.innerHTML = submit_form.innerHTML + "<input type ='hidden' name='card' value = " + final_value + ">";
             }
+            submit_form.innerHTML = submit_form.innerHTML + "<input type='hidden' name='cust' value = '"+customer_name+"' >";
         }
     </script>
 {% endblock %}

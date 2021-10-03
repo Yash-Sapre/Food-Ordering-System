@@ -125,13 +125,20 @@ def add_order():
 
         # Retrieving customer id
         print('-----------------------------------------------------')
-        customer_name = request.form.getlist('customer_name')[0]
+
+        customer_name = request.form.getlist('cust')[0]
+        print(customer_name)
         dbCursor.execute(f"select * from customer where customer_name = '{customer_name}'")
+        
+
         if len(dbCursor.fetchall()) == 0:
             dbCursor.execute(f"insert into customer (customer_name) values ('{customer_name}')")
-        dbCursor.execute(f"select * from customer where customer_name = '{customer_name}'")
-        customer_id = dbCursor.fetchall()[0][1]
+            db.commit()
 
+        dbCursor.execute(f"select * from customer where customer_name = '{customer_name}'")
+
+        customer_id = dbCursor.fetchall()[0][0]
+        print(customer_id)
         # Retrieving biggest order_id
         try:
             dbCursor.execute(f"select max(order_id) from customer_order")
@@ -141,8 +148,10 @@ def add_order():
 
         # Inserting order in table
         for food_id,count in food_count_dict.items():
-            # print(f"insert into customer_order values ({order_id},{customer_id},{food_id},{count},false)")
+            print(f"insert into customer_order values ({order_id},{customer_id},{food_id},{count},false)")
             dbCursor.execute(f"insert into customer_order values ({order_id},{customer_id},{food_id},{count},false)")
+
+        db.commit()
         return redirect('/')
     return render_template("add_order.html",food_list=food_list)
 
