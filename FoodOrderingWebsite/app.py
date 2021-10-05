@@ -9,7 +9,6 @@ from mysqldb import dbCursor,db
 from flask_bcrypt import Bcrypt
 from io import BytesIO
 
-
 bcrypt = Bcrypt()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ab0d2f821826296ce6ff45fa2febb555'
@@ -82,6 +81,7 @@ def log_admin():
 # def admin_pg():
 #     details=dbCursor.fetchall()[0]
 
+
 @app.route("/userdb",methods=['GET', 'POST'])
 def showdb():
     
@@ -89,6 +89,7 @@ def showdb():
     details=dbCursor.fetchall()
     
     return render_template('admin_see.html',title="User Database",details=details)
+
 
 @app.route("/addfooditems",methods=['GET','POST'])
 def add_food():
@@ -110,12 +111,56 @@ def add_food():
     return render_template('addfooditems.html',title="Add Food items",Food_details=Food_details)
 
 
-
-
 @app.route("/logout")
 def logout_page():
     session.pop('user_id')
     g.pop('user')
     return redirect('/home')
+
+
+@app.route("/add_order",methods=['GET', 'POST'])
+def add_order():
+    dbCursor.execute("SELECT * FROM FOOD")
+    food_list = dbCursor.fetchall()
+
+    if request.method == "POST":
+
+        # Retrieving food id and their counts from the cart
+        food_count_dict = {}
+        print(request.form)
+        for item in request.form.getlist('card'):
+            food_count_dict[int(item.split('-')[0].replace('card_',''))]=int(item.split('-')[1])
+
+        # Retrieving customer id
+        print('-----------------------------------------------------')
+
+        customer_name = request.form.getlist('cust')[0]
+        print(customer_name)
+        dbCursor.execute(f"select * from customer where customer_name = '{customer_name}'")
+        
+
+        if len(dbCursor.fetchall()) == 0:
+            dbCursor.execute(f"insert into customer (customer_name) values ('{customer_name}')")
+            db.commit()
+
+        dbCursor.execute(f"select * from customer where customer_name = '{customer_name}'")
+
+        customer_id = dbCursor.fetchall()[0][0]
+        print(customer_id)
+        # Retrieving biggest order_id
+        try:
+            dbCursor.execute(f"select max(order_id) from customer_order")
+            order_id = dbCursor.fetchall()[0][0] + 1
+        except:
+            order_id = 1
+
+        # Inserting order in table
+        for food_id,count in food_count_dict.items():
+            print(f"insert into customer_order values ({order_id},{customer_id},{food_id},{count},false)")
+            dbCursor.execute(f"insert into customer_order values ({order_id},{customer_id},{food_id},{count},false)")
+
+        db.commit()
+        return redirect('/')
+    return render_template("add_order.html",food_list=food_list)
 
 
