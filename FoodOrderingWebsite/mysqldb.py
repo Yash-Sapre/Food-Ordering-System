@@ -33,6 +33,7 @@ else:
     print('CREATING DATABASE COUNTER')
     init_db()
     dbCursor.execute('USE COUNTER')
+    
 
 
 

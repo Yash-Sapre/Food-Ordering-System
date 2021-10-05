@@ -129,7 +129,7 @@ def add_order():
         customer_name = request.form.getlist('cust')[0]
         print(customer_name)
         dbCursor.execute(f"select * from customer where customer_name = '{customer_name}'")
-        
+
 
         if len(dbCursor.fetchall()) == 0:
             dbCursor.execute(f"insert into customer (customer_name) values ('{customer_name}')")
