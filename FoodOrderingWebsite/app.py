@@ -93,7 +93,7 @@ def showdb():
 
 @app.route("/addfooditems",methods=['GET','POST'])
 def add_food():
-    dbCursor.execute("select food_id,food_name,price from FOOD")
+    dbCursor.execute("select food_id,food_name,food_price from FOOD")
     Food_details=dbCursor.fetchall()
     if request.method=='POST':
         food_id=request.form['food_id']
@@ -101,7 +101,7 @@ def add_food():
         price=request.form['price']
         food_image=request.files['food_image']
         food_image.save(os.path.join(os.getcwd()+'\static',secure_filename(food_id+'.jpg')))
-        sql=("INSERT INTO FOOD (food_id,food_name,price) values(%s,%s,%s) ")
+        sql=("INSERT INTO FOOD (food_id,food_name,food_price) values(%s,%s,%s) ")
         val=(food_id,name,price)
         dbCursor.execute(sql,val)
        

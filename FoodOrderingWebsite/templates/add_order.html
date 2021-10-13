@@ -5,8 +5,8 @@
             <div style="width :75% ;float: left;display: flex;flex-wrap: wrap">
                 {% for item in food_list %}
 
-                    <div class="card text-white bg-success col-3" style="margin: 1em ;height:10em">
-                        {#                        <img class="card-img-top" src="" alt="Card image cap">#}
+                    <div class="card text-white bg-success col-3" style="margin: 1em ;height:15em">
+                        <img class="card-img-top" src="static/{{item.0}}.jpg" alt="Card image cap" style = "width: 12em; height:10em">
                         <div class="card-body">
                             <h5 class="card-title" id={{ item.0 }}>{{ item.1 }}</h5>
                             <div class="card-text" id="price_{{ item.0 }}">{{ item.2 }}</div>
