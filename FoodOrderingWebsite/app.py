@@ -118,4 +118,63 @@ def logout_page():
     g.pop('user')
     return redirect('/home')
 
+@app.route("/add_order",methods=['GET', 'POST'])
+def add_order():
+    dbCursor.execute("SELECT * FROM FOOD")
+    food_list = dbCursor.fetchall()
 
+    if request.method == "POST":
+
+        # Retrieving food id and their counts from the cart
+        food_count_dict = {}
+        print(request.form)
+        for item in request.form.getlist('card'):
+            food_count_dict[int(item.split('-')[0].replace('card_',''))]=int(item.split('-')[1])
+
+        # Retrieving customer id
+        print('-----------------------------------------------------')
+
+        customer_name = request.form.getlist('cust')[0]
+        print(customer_name)
+        dbCursor.execute(f"select * from customer where customer_name = '{customer_name}'")
+        
+
+        if len(dbCursor.fetchall()) == 0:
+            dbCursor.execute(f"insert into customer (customer_name) values ('{customer_name}')")
+            db.commit()
+
+        dbCursor.execute(f"select * from customer where customer_name = '{customer_name}'")
+
+        customer_id = dbCursor.fetchall()[0][0]
+        print(customer_id)
+        # Retrieving biggest order_id
+        try:
+            dbCursor.execute(f"select max(order_id) from customer_order")
+            order_id = dbCursor.fetchall()[0][0] + 1
+        except:
+            order_id = 1
+
+        # Inserting order in table
+        for food_id,count in food_count_dict.items():
+            
+            dbCursor.execute(f"insert into customer_order values ({order_id},{food_id},{customer_id},{count},false)")
+
+        db.commit()
+        return redirect('/')
+    return render_template("add_order.html",food_list=food_list)
+
+def getname(id):
+    dbCursor.execute(f"select food_name from FOOD where food_id='{id}'")
+    return db.fetchall()
+
+@app.route("/display_order",methods=['GET', 'POST'])
+def display_order():
+    
+    dbCursor.execute("select customer_name,food_name,status from ((customer_order INNER JOIN customer ON customer_order.customer_id = customer.customer_id) INNER JOIN food ON customer_order.food_id = food.food_id) where status = 0")
+    order=dbCursor.fetchall()
+    
+    y=[]
+    for x in range(len(order)):
+        y.append(order[x][1])
+    
+    return render_template('Displayf.html',title="All ordered food items",order=order)
