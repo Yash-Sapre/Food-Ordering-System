@@ -1,12 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Display Food Items</title>
-</head>
-<body>
+{% extends 'layout.html' %}
+{%block body%}
+<div style="color:black;text-align:center">
+<h1 >All Orders</h1>
+</div>
+<hr>
+<table class="table">
+  <thead>
+    <tr>
     
-</body>
-</html>
+      <th scope="col">Customer Name</th>
+      <th scope="col">Food Name</th>
+      <th scope="col">Status</th>
+      <th scope="col">Confirm Order</th>
+    
+    </tr>
+  </thead>
+  <tbody>
+  
+  {% for item in order %}
+    
+    <tr>
+
+      <td>{{item.0}}</td>
+      <td>{{item.1}}</td>
+      <td>{{item.2}}</td>
+       <td> <button type="button"  class="btn btn-success float-right">Confirm</button></td>
+ 
+    </tr>
+    
+    {% endfor %}
+
+  </tbody>
+</table>
+
+
+{%endblock%}
