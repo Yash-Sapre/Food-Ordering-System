@@ -9,7 +9,6 @@ from mysqldb import dbCursor,db
 from flask_bcrypt import Bcrypt
 from io import BytesIO
 
-
 bcrypt = Bcrypt()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ab0d2f821826296ce6ff45fa2febb555'
@@ -82,6 +81,7 @@ def log_admin():
 # def admin_pg():
 #     details=dbCursor.fetchall()[0]
 
+
 @app.route("/userdb",methods=['GET', 'POST'])
 def showdb():
     
@@ -89,6 +89,7 @@ def showdb():
     details=dbCursor.fetchall()
     
     return render_template('admin_see.html',title="User Database",details=details)
+
 
 @app.route("/addfooditems",methods=['GET','POST'])
 def add_food():
@@ -110,13 +111,12 @@ def add_food():
     return render_template('addfooditems.html',title="Add Food items",Food_details=Food_details)
 
 
-
-
 @app.route("/logout")
 def logout_page():
     session.pop('user_id')
     g.pop('user')
     return redirect('/home')
+
 
 @app.route("/add_order",methods=['GET', 'POST'])
 def add_order():
@@ -156,25 +156,11 @@ def add_order():
 
         # Inserting order in table
         for food_id,count in food_count_dict.items():
-            
-            dbCursor.execute(f"insert into customer_order values ({order_id},{food_id},{customer_id},{count},false)")
+            print(f"insert into customer_order values ({order_id},{customer_id},{food_id},{count},false)")
+            dbCursor.execute(f"insert into customer_order values ({order_id},{customer_id},{food_id},{count},false)")
 
         db.commit()
         return redirect('/')
     return render_template("add_order.html",food_list=food_list)
 
-def getname(id):
-    dbCursor.execute(f"select food_name from FOOD where food_id='{id}'")
-    return db.fetchall()
 
-@app.route("/display_order",methods=['GET', 'POST'])
-def display_order():
-    
-    dbCursor.execute("select customer_name,food_name,status from ((customer_order INNER JOIN customer ON customer_order.customer_id = customer.customer_id) INNER JOIN food ON customer_order.food_id = food.food_id) where status = 0")
-    order=dbCursor.fetchall()
-    
-    y=[]
-    for x in range(len(order)):
-        y.append(order[x][1])
-    
-    return render_template('Displayf.html',title="All ordered food items",order=order)
