@@ -157,7 +157,7 @@ def add_order():
         # Inserting order in table
         for food_id,count in food_count_dict.items():
             
-            dbCursor.execute(f"insert into customer_order values ({order_id},{food_id},{customer_id},{count},false)")
+            dbCursor.execute(f"insert into customer_order values ({order_id},{customer_id},{food_id},{count},false)")
 
         db.commit()
         return redirect('/')
