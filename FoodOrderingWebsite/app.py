@@ -168,11 +168,28 @@ def add_order():
 @app.route("/display_order",methods=['GET', 'POST'])
 def display_order():
     
-    dbCursor.execute("select customer_name,food_name,status from ((customer_order INNER JOIN customer ON customer_order.customer_id = customer.customer_id) INNER JOIN food ON customer_order.food_id = food.food_id) where status = 0")
-    order=dbCursor.fetchall()
-    
-    y=[]
-    for x in range(len(order)):
-        y.append(order[x][1])
+    dbCursor.execute("select order_id,customer_name,food_name,status from ((customer_order INNER JOIN customer ON customer_order.customer_id = customer.customer_id) INNER JOIN food ON customer_order.food_id = food.food_id) where status = 0")
+    order=dbCursor.fetchall()    
+    print(order)
     
     return render_template('Displayf.html',title="All ordered food items",order=order)
+
+@app.route("/update_status/<int:id>")
+def update_status(id):
+    dbCursor.execute("select order_id,customer_name,food_name,status from ((customer_order INNER JOIN customer ON customer_order.customer_id = customer.customer_id) INNER JOIN food ON customer_order.food_id = food.food_id) where status = 0")
+    order=dbCursor.fetchall()
+    l1=[]
+
+    for i in order:
+        if i[0]==id:
+            l1.append((i[0],i[1],i[2],1))
+            dbCursor.execute(f"update customer_order set status=1 where order_id={id}")
+            db.commit()
+        else:
+            l1.append((i[0],i[1],i[2],0))
+    return render_template('Displayf.html',title="All ordered food items",order=l1)
+
+    
+if __name__=="__main__":
+
+    app.run(debug=True)

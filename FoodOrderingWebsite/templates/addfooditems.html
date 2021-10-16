@@ -20,7 +20,7 @@
                             </div>
                             <div class="modal-body">
 
-                                <form action="{{ url_for('add_food') }}" method="POST" enctype='multipart/form-data' >
+                                <form action="{{ url_for('add_food') }}" method="POST" enctype="multipart/form-data">
 
                                     <div class="form-group">
 
@@ -34,15 +34,14 @@
                                         <input type="text" class="form-control" name="name" required="1">
                                     </div>
                                     <div class="form-group">
-                                        <label>Price of Food:</label>
-                                        <input type="number" class="form-control" name="price" required="1">
+                                        <label>Image of Food:</label>
+                                        <input type="file" class="form-control" name="food_image" required="1">
                                     </div>
                                     <div class="form-group">
-                                        <label>Image of Food:</label>
-                                        <input type="file" class="form-control" name="food_image" required="1" >
+                                        <label>Price</label>
+                                        <input type="number" class="form-control" name="price" required="1">
                                     </div>
-                                    
-                                    
+
                                     <div class="form-group">
                                         <button class="btn btn-primary" type="submit">Add here</button>
                                     </div>
