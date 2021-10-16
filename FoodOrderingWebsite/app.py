@@ -187,7 +187,8 @@ def update_status(id):
             db.commit()
         else:
             l1.append((i[0],i[1],i[2],0))
-    return render_template('Displayf.html',title="All ordered food items",order=l1)
+    return redirect('/display_order')
+    # return render_template('Displayf.html',title="All ordered food items",order=l1)
 
     
 if __name__=="__main__":
